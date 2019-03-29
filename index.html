@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<HTML>
+<head>
+    <title>JQuery講座を受講した際のもの</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+            // jquey
+            $(document).ready(function(){
+                // 行追加
+                $('#btnAdd').click(
+                    function(){
+                        $('#table').get(0).insertRow(-1).insertCell(-1).innerHTML = $('#text').val();
+                        $('#text').val('');
+                    }
+                );
+                // 行削除
+                $('#table').on("click", "tr", function(){
+                    $(this).remove();
+                });
+
+            });
+    </script>
+    <style>
+        td {
+            width: 200px;
+            height: 30px;
+            background-color:rgb(230, 230, 230);
+        }
+        #text{
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="text">
+    <input type="button" id="btnAdd" value="追加">
+
+    <table id="table">
+        <tr><td>aaa</td></tr>
+    </table>
+</body>
+</HTML>
