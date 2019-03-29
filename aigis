@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>スプレッド読込みテスト</title>
+<!--クライアントスクリプト-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready( function(){
+// ページ読み込み時に実行したい処理
+    SelectData();
+});
+$(function() {
+    $('input[name="selectRadio"]:radio').change(function() {  
+        SelectData();
+    });
+    $('#selectbox').change(function() {
+        SelectData();
+    });
+});
+
+function SelectData() {
+    //google.script.run.withSuccessHandler(makeTable).SelectData($("input[name=selectRadio]:checked").val(), $("#selectbox").val());
+    $.getJSON('https://script.google.com/macros/s/AKfycbzi4tmr8D0bKXhe2KwJG4bm8j1uP5wu4Rg3Eqj-UkJeiAN8Sr4/exec?',
+      {
+        row: $("input[name=selectRadio]:checked").val(),
+        col: $("#selectbox").val()
+      }
+    ).done(makeTable);
+}
+
+// SelectData() が完了したら呼び出される
+function makeTable( json_data ) {
+    var data = JSON.parse(json_data);
+    var tableText = data["response"];
+    document.getElementById("table").textContent = null;
+    // 表の作成開始
+    var rows=[];
+    var colorCode=["#CCCCFF","#FFDDBB"];
+    var table = document.createElement("table");
+    for(i=0;i<tableText.length && (tableText[i][0]!=""||tableText[i][1]!="");i++){
+    
+        // 行の追加
+        rows.push(table.insertRow(-1));
+        for(j=0;j<tableText[0].length;j++){
+            // 追加した行にセルを追加してテキストを書き込む
+            cell=rows[i].insertCell(-1);
+            cell.appendChild(document.createTextNode(tableText[i][j]));
+            // 背景色の設定
+            if(i<4){
+                cell.style.backgroundColor=colorCode[0];
+            } else if(i%2 == 1){
+                cell.style.backgroundColor=colorCode[1];
+            }
+            // 文字位置の設定
+            if(i<4){
+                cell.style.textAlign="center";
+            } else {
+                cell.style.textAlign="right";
+            }
+            // size設定
+            if(i==0){
+                cell.style.width = "150px";
+            }
+        }
+    }
+    document.getElementById("table").appendChild(table);
+}
+</script>
+<style type="text/css">
+body {
+font-family:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+line-height:25px;
+font-size:0.85em;
+}
+table {
+width:326px;
+}
+td {
+padding: 1px 5px;
+}
+#edit {
+width:302px;
+padding:10px 10px;
+background:#CCFFCC;
+border:#FFFFFF solid 2px;
+}
+#title {
+width:302px;
+padding:0px 10px;
+background:#888888;
+color:#FFFFFF;
+border:#FFFFFF solid 2px;
+}
+</style>
+</head>
+<!--本体-->
+<body>
+<div id="title">
+<text>千年戦争アイギス育成計画</text>
+</div>
+<div id="edit">
+<p>
+    <input name="selectRadio" type="radio" value="0" checked>銀
+    <input name="selectRadio" type="radio" value="1">金
+    <input name="selectRadio" type="radio" value="2">青
+    <input name="selectRadio" type="radio" value="3">白
+    <input name="selectRadio" type="radio" value="4">黒
+</p>
+<p>
+    <text>CC/覚醒：</text>
+    <select id="selectbox">
+        <option value="0" selected>未CC</option>
+        <option value="1">CC/未覚醒</option>
+        <option value="2">第一覚醒</option>
+        <option value="3">第二覚醒</option>
+    </select>
+</p>
+</div>
+<div id ="table"></div>
+</body>
+</html>
+
