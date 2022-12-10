@@ -14,20 +14,21 @@
         req.open("get", dataPath, true);
         req.send(null);
         req.onload = function(){
-    
-        // 読み込んだ CSV データをそのまま見たい場合
-        outputElement.innerHTML = req.responseText;
-        
-        // 読み込んだ CSV データを２次元配列に変換します。
-        //let dat = convertCSVtoArray( req.responseText );
-    
-        // 好きなように処理します。
-        //procData(dat);
+
+            var csv = req.responseText;
+            var tmp = csv.split("\r\n");
+            var s = "";
+            for (let i = 0; i < tmp.length; i++){
+                if (tmp[i] != ""){
+                    result[i] = s += '<span>'+tmp[i]+'</span>';
+                }
+            }
+            outputElement.innerHTML = s;
         }
         req.close
     }
     const outputElement = document.getElementById('output_data');
-    outputElement.innerHTML = "aaa"
+    outputElement.innerHTML = ""
     getCsvData( 'list.txt' );
 </script>
 

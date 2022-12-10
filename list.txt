@@ -1,3 +1,3 @@
-D:\develop\www\www\aigis.html
-D:\develop\www\www\index.html
-D:\develop\www\www\test0000.html
+aigis.html
+index.html
+test0000.html

@@ -1,1 +1,1 @@
-dir /s /b *.html > list.txt
+dir /b *.html > list.txt
