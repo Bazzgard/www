@@ -18,12 +18,13 @@
 
             var txt = req.responseText;
             var tmp = txt.split(/\r\n|\n/);
-            var s = "";
+            var s = "<ul>";
             for (let i = 0; i < tmp.length; i++){
                 if (tmp[i] != ""){
-                    s += "<span><a href='"+tmp[i]+"'>"+tmp[i]+"</a></span><br>";
+                    s += "<li><a href='"+tmp[i]+"'>"+tmp[i]+"</a></li>";
                 }
             }
+            s += "</ul>";
             outputElement.innerHTML = s;
         }
         req.close
