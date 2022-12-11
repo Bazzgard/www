@@ -1,4 +1,4 @@
-<html>
+<html lang="ja">
 <body>
 <select name="color">
     <option value="red">赤</option>
@@ -8,8 +8,7 @@
 
 <div id="output_data"></div>
 
-
-
+</body>
 <script>
     function getCsvData( dataPath ){
         var req = new XMLHttpRequest();
@@ -18,7 +17,7 @@
         req.onload = function(){
 
             var txt = req.responseText;
-            var tmp = txt.split("\r\n");
+            var tmp = txt.split(/\r\n|\n/);
             var s = "";
             for (let i = 0; i < tmp.length; i++){
                 if (tmp[i] != ""){
@@ -31,8 +30,6 @@
     }
     const outputElement = document.getElementById('output_data');
     outputElement.innerHTML = "e"
-    getCsvData( 'list.txt' );
+    getCsvData( 'https://bazzgard.github.io/www/list.txt' );
 </script>
-
-</body>
 </html>
