@@ -8,6 +8,8 @@
 
 <div id="output_data"></div>
 
+
+
 <script>
     function getCsvData( dataPath ){
         var req = new XMLHttpRequest();
@@ -15,12 +17,12 @@
         req.send(null);
         req.onload = function(){
 
-            var csv = req.responseText;
-            var tmp = csv.split("\r\n");
+            var txt = req.responseText;
+            var tmp = txt.split("\r\n");
             var s = "";
             for (let i = 0; i < tmp.length; i++){
                 if (tmp[i] != ""){
-                    s += '<span>'+tmp[i]+'</span>';
+                    s += "<a href='"+tmp[i]+"'>"+tmp[i]+"</a><br>";
                 }
             }
             outputElement.innerHTML = s;
@@ -28,7 +30,7 @@
         req.close
     }
     const outputElement = document.getElementById('output_data');
-    outputElement.innerHTML = ""
+    outputElement.innerHTML = "e"
     getCsvData( 'list.txt' );
 </script>
 
