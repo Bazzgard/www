@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .error {
+        padding: 20px;
+        background-color: #f44336;
+        color: white;
+        width: 100%;
+        background-image: url(img/error-icon.png);
+        background-repeat: no-repeat;
+        background-position: 10px 50%;
+        display: none;
+        padding-left: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="toggleError">エラーを表示/非表示</button>
+    <div class="error" id="error">
+      <p>エラーが発生しました。再試行してください。</p>
+    </div>
+
+    <script>
+      const toggleErrorButton = document.getElementById("toggleError");
+      const errorMessage = document.getElementById("error");
+
+      toggleErrorButton.addEventListener("click", function() {
+        if (errorMessage.style.display === "block") {
+          errorMessage.style.display = "none";
+        } else {
+          errorMessage.style.display = "block";
+        }
+      });
+    </script>
+  </body>
+</html>

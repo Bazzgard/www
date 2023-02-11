@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <style>
+      .error {
+        display: none;
+        color: red;
+        padding: 10px;
+      }
+      .error i {
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="input"></textarea>
+    <button id="submit">Submit</button>
+    <div id="error" class="error">
+      <i class="fa fa-exclamation-triangle"></i>
+      Input must be 50 bytes or less.
+    </div>
+    <div id="output"></div>
+    <script>
+      document.getElementById("submit").addEventListener("click", function() {
+        var input = document.getElementById("input").value;
+        var encoder = new TextEncoder();
+        var inputBytes = encoder.encode(input).length;
+        document.getElementById("output").innerHTML = "Input size: " + inputBytes + " bytes.";
+        if (inputBytes >= 50) {
+          document.getElementById("error").style.display = "block";
+        } else {
+          document.getElementById("error").style.display = "none";
+        }
+      });
+    </script>
+  </body>
+</html>

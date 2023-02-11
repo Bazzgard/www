@@ -1,0 +1,59 @@
+<button id="switch">Switch to dark mode</button>
+
+<table>
+  <tr>
+    <th>Column 1</th>
+    <th>Column 2</th>
+  </tr>
+  <tr>
+    <td>Row 1, Column 1</td>
+    <td>Row 1, Column 2</td>
+  </tr>
+  <tr>
+    <td>Row 2, Column 1</td>
+    <td>Row 2, Column 2</td>
+  </tr>
+</table>
+
+<p>
+  Some text here
+</p>
+
+<style>
+body {
+  background-color: white;
+  color: black;
+}
+
+.dark-mode {
+  background-color: black;
+  color: white;
+}
+
+table, th, td {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+.dark-mode table{
+  background-color: #333;
+  border-color: #fff;
+  color: white;
+}
+
+.dark-mode th{
+  border-color: #fff;
+}
+
+.dark-mode td{
+  border-color: #fff;
+}
+
+</style>
+
+<script>
+const switchBtn = document.querySelector('#switch');
+switchBtn.addEventListener('click', function () {
+  document.body.classList.toggle('dark-mode');
+});
+</script>

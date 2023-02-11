@@ -1,3 +1,7 @@
 aigis.html
+darkmode.html
+errmsg.html
 index.html
+input.html
 jquery.html
+menu.html
