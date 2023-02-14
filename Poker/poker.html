@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poker Game</title>
+  <style>
+    #hand {
+      display: flex;
+    }
+    .card {
+      width: 70px;
+      height: 100px;
+      border: 1px solid black;
+      margin-right: 10px;
+      text-align: center;
+    }
+    .card:last-child {
+      margin-right: 0;
+    }
+    .hold {
+      background-color: lightgray;
+    }
+    #result {
+      color: blue;
+    }
+    #message {
+      color: red;
+    }
+    button#exchangeButton, 
+    div#result, 
+    div#status,
+    div#message {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="hand"></div>
+  <button id="exchangeButton">Exchange</button>
+  <div id="result"></div>
+  <div id="status"></div>
+  <div id="message"></div>
+</body>
+<script>
+  class Card {
+    constructor() {
+      this.rank = ranks[Math.floor(Math.random() * ranks.length)];
+      this.suit = suits[Math.floor(Math.random() * suits.length)];
+      this.hold = false;
+    }
+    toCardString(){
+      return `${this.rank}${this.suit}`;
+    }
+    toggleHold() {
+      this.hold = !this.hold;
+    }
+    display() {
+      let a = document.createElement('div');
+      a.className = 'card';
+      a.innerHTML = `${this.rank} ${this.suit}`;
+      a.addEventListener('click', function () {
+        a.classList.toggle('hold');
+        this.toggleHold();
+      }.bind(this));
+      if (this.hold) {
+        a.classList.add('hold');
+      }
+      return a;
+    }
+
+  }
+  const suits = ['S', 'C', 'D', 'H'];
+  const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+  let hand = [];
+
+  // 配ったカードを管理する
+  const dealtCards = [];
+  function dealCard(old = null) {
+    if (dealtCards.length >= 52) {
+      document.getElementById('message').innerText = `out of cards`;
+      return old;
+    }
+    let newCard = new Card();
+    while (dealtCards.includes(newCard.toCardString())) {
+      newCard = new Card();
+    }
+    dealtCards.push(newCard.toCardString());
+    return newCard;
+  }
+
+  function renderCards() {
+    const handElement = document.getElementById('hand');
+    handElement.innerHTML = '';
+    hand.forEach((a) => {
+      handElement.appendChild(a.display());
+    });
+  }
+
+  function getHandRank(cards) {
+    let handRank = 0;
+
+    // Check for a flush
+    let flush = true;
+    for (let i = 1; i < cards.length; i++) {
+      if (cards[i].suit !== cards[0].suit) {
+        flush = false;
+        break;
+      }
+    }
+    if (flush) {
+      handRank = 5;
+    }
+
+    return getHandRankText(handRank);
+  }
+
+  function getHandRankText(handRank) {
+    if (handRank === 5) return 'flush';
+    return 'High Card';
+  }
+
+  function exchangeButtonClicked() {
+    // Hold以外のカードを交換
+    hand = hand.map(a => a.hold ? a : dealCard(a));
+    renderCards();
+    document.getElementById('result').innerText = getHandRank(hand);
+    document.getElementById('status').innerText = `${dealtCards.length} / 52`;
+  }
+
+  for (let i = 0; i < 5; i++) {
+    hand.push(dealCard());
+  }
+
+  renderCards();
+  const exchangeButton = document.getElementById('exchangeButton');
+  exchangeButton.addEventListener('click', exchangeButtonClicked);
+</script>
+</html>

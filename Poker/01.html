@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .card {
+      width: 70px;
+      height: 100px;
+      background-color: white;
+      border: 1px solid black;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .card-container {
+        display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h1>Poker Hand</h1>
+  <div id="hand"></div>
+  <div id="controls">
+    <button id="exchangeButton">Exchange</button>
+  </div>
+  <script>
+    const suits = ["S", "H", "C", "D"];
+    const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+
+    const hand = document.getElementById("hand");
+    const exchangeButton = document.getElementById("exchangeButton");
+
+    for (let i = 0; i < 5; i++) {
+        const cardContainer = document.createElement("div");
+        cardContainer.className = "card-container";
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.textContent = `${ranks[i]} ${suits[i % 4]}`;
+        card.addEventListener("click", function() {
+            const hold = document.createElement("div");
+            hold.className = "hold";
+            hold.textContent = "Hold";
+            cardContainer.appendChild(hold);
+        });
+        cardContainer.appendChild(card);
+
+        hand.appendChild(cardContainer);
+    }
+
+    exchangeButton.addEventListener("click", function() {
+        const cardContainers = hand.children;
+        for (let i = 0; i < cardContainers.length; i++) {
+            const cardContainer = cardContainers[i];
+            if (!cardContainer.querySelector(".hold")) {
+                const card = cardContainer.children[0];
+                const newSuit = suits[Math.floor(Math.random() * 4)];
+                const newRank = ranks[Math.floor(Math.random() * 13)];
+                card.textContent = `${newRank} ${newSuit}`;
+            }
+        }
+    });
+  </script>
+</body>
+</html>

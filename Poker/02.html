@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poker Game</title>
+  <style>
+    #hand {
+      display: flex;
+    }
+    .card {
+      width: 70px;
+      height: 100px;
+      border: 1px solid black;
+      margin-right: 10px;
+      text-align: center;
+    }
+    .card:last-child {
+      margin-right: 0;
+    }
+    .hold {
+      background-color: lightgray;
+    }
+  </style>
+</head>
+<body>
+  <div id="hand"></div>
+  <button id="exchangeButton">Exchange</button>
+  <script>
+    const suits = ['♠️', '♣️', '♦️', '❤️'];
+    const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+    let hand = [];
+
+    function renderCards() {
+      const handElement = document.getElementById('hand');
+      handElement.innerHTML = '';
+      hand.forEach((card) => {
+        const cardElement = document.createElement('div');
+        cardElement.className = 'card';
+        cardElement.innerHTML = `${card.rank} ${card.suit}`;
+        cardElement.addEventListener('click', function () {
+          this.classList.toggle('hold');
+        });
+        handElement.appendChild(cardElement);
+      });
+    }
+
+    function getHandRank(cards) {
+      // Implementation for hand ranking
+      return 'High Card';
+    }
+
+    function exchangeButtonClicked() {
+      hand = hand.map((card) => {
+        if (!card.hold) {
+          return {
+            suit: suits[Math.floor(Math.random() * suits.length)],
+            rank: ranks[Math.floor(Math.random() * ranks.length)],
+            hold: false,
+          };
+        }
+        return card;
+      });
+      renderCards();
+      const rank = getHandRank(hand);
+      alert(`Your hand rank is: ${rank}`);
+    }
+
+    for (let i = 0; i < 5; i++) {
+      hand.push({
+        suit: suits[Math.floor(Math.random() * suits.length)],
+        rank: ranks[Math.floor(Math.random() * ranks.length)],
+        hold: false,
+      });
+    }
+
+    renderCards();
+    const exchangeButton = document.getElementById('exchangeButton');
+    exchangeButton.addEventListener('click', exchangeButtonClicked);
+  </script>
+</body>
+</html>

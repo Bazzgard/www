@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Two Player Poker Game</title>
+    <style>
+      .card {
+        width: 70px;
+        height: 100px;
+        background-color: white;
+        border: 1px solid black;
+        float: left;
+        text-align: center;
+        margin: 10px;
+      }
+      #hand {
+        display: flex;
+      }
+      #player1-hand {
+        display: flex;
+      }
+      #player2-hand {
+        display: flex;
+      }
+      #result {
+        clear: both;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Two Player Poker Game</h1>
+    <div id="player1-hand">
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+    </div>
+    <div id="player2-hand">
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+    </div>
+    <br>
+    <button id="exchangeButton">Exchange</button>
+    <br><br>
+    <div id="result"></div>
+    <script src="index.js"></script>
+  </body>
+</html>
