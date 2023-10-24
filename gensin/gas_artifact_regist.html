@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GENSIN 聖遺物登録</title>
+    <style>
+        .w-gensin-contents {
+            background-color: #e6e1cf;
+            padding: 20px 10px;
+            width: 65%;
+        }
+        .w-gensin-sub-option {
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .w-gensin-sub-option>select {
+            background-color: rgba(255,255,255,.6);
+            color: #404040;
+            padding: 5px;
+            border: none;
+            height: 36px;
+            vertical-align: middle;
+            margin-right: 5px;
+            font-weight: 700;
+            width: 25%;
+        }
+        .w-gensin-sub-option>input[type=number] {
+            width: 20%;
+            padding: 5px;
+            background-color: rgba(255,255,255,.6);
+            vertical-align: middle;
+            font-weight: 700;
+            height: 23px;
+            border: 1px solid #e2e2e2;
+            border-radius: 2px;
+            display: inline-block;
+            text-align: right;
+        }
+
+        .enhancement-value {
+          width: 60px;
+          text-align: center;
+          background-color: #f0f0f0;
+          margin-right: 10px;
+          padding: 5px;
+          border-radius: 5px;
+        }
+
+        .styled-button-min {
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          padding: 5px 10px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin-left: 2px;
+          cursor: pointer;
+          border-radius: 4px;
+        }
+
+        .styled-button {
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin-top: 20px;
+          cursor: pointer;
+          border-radius: 4px;
+        }
+
+        .styled-button:hover {
+          background-color: #45a049;
+        }
+      </style>
+</head>
+<body>
+    <div class="w-gensin-contents">
+      <div class="w-gensin-sub-option">
+        <select id="items">
+          <option value="">聖遺物選択</option>
+        </select>
+      </div>
+      <div class="w-gensin-sub-option">
+        <select id="parts">
+          <option value="">部位</option>
+        </select>
+      </div>
+      <div class="w-gensin-sub-option">
+        <select id="main_op">
+          <option value="">メインオプション</option>
+        </select>
+      </div>
+      <div id="div1" class="w-gensin-sub-option">
+        <select id="sub_op1">
+          <option value="">サブオプション</option>
+        </select>
+        <input id="sub_op1_val" type="number" step="0.1" min="0">
+      </div>
+      <div id="div2" class="w-gensin-sub-option">
+        <select id="sub_op2">
+          <option value="">サブオプション</option>
+        </select>
+        <input id="sub_op2_val" type="number" step="0.1" min="0">
+      </div>
+      <div id="div3" class="w-gensin-sub-option">
+        <select id="sub_op3">
+          <option value="">サブオプション</option>
+        </select>
+        <input id="sub_op3_val" type="number" step="0.1" min="0">
+      </div>
+      <div id="div4" class="w-gensin-sub-option">
+        <select id="sub_op4">
+          <option value="">サブオプション</option>
+        </select>
+        <input id="sub_op4_val" type="number" step="0.1" min="0">
+      </div>
+      <div class="w-gensin-sub-option">
+        <select id="characters">
+          <option value="">使用キャラ</option>
+        </select>
+      </div>
+    </div>
+    <button class="styled-button" onclick="executeScript()">スクリプトを実行</button>
+
+    <script>
+      function set(list, id, val) {
+        if (!id) return;
+        list[id + 3] = val;
+      }
+      function executeScript() {
+        // Google Apps Scriptの実行URL
+        var scriptUrl = 'https://script.google.com/macros/s/AKfycbzXpNlqGUM4-33mKbkEEFGgbpO5rmNUZ3G4otP_ctuY/dev';
+        var row = "?row=";
+        
+        var character = document.getElementById("characters").value;
+        var item = document.getElementById("items").value;
+        var part = document.getElementById("parts").value;
+        var main = document.getElementById("main_op").value;
+
+        var r = [character,item,part,main,"","","","","","","","","",""];
+
+        set(r,parseInt(document.getElementById("sub_op1").value),document.getElementById("sub_op1_val").value);
+        set(r,parseInt(document.getElementById("sub_op2").value),document.getElementById("sub_op2_val").value);
+        set(r,parseInt(document.getElementById("sub_op3").value),document.getElementById("sub_op3_val").value);
+        set(r,parseInt(document.getElementById("sub_op4").value),document.getElementById("sub_op4_val").value);
+
+        console.log(r);
+        window.open(scriptUrl + "?row=" + encodeURIComponent(r));
+      }
+
+      function setCombo(items,comboBox) {
+        //要素をコンボボックスに追加
+        for (var i = 0; i < items.length; i++) {
+          comboBox.appendChild(new Option(items[i], items[i]));
+        }
+      }
+      function setCombo2(items,comboBox) {
+        //要素をコンボボックスに追加
+        for (var i = 0; i < items.length; i++) {
+          comboBox.appendChild(new Option(items[i], i+1));
+        }
+      }
+      // コンボボックスに表示する値の配列
+      var characters = [
+        "ベネット", "ガイア", "レザー", "ノエル", "バーバラ", "スクロース", "リサ", "アンバー", "フィッシュル", "行秋",
+        "北斗", "重雲", "香菱", "凝光", "主人公", "ジン", "ディルック", "モナ", "刻晴", "七七", "ウェンティ",
+        "クレー", "ディオナ", "タルタリヤ", "辛炎", "鍾離", "アルベド", "甘雨", "魈", "胡桃", "ロサリア", "煙緋",
+        "エウルア", "楓原万葉", "神里綾華", "早柚", "宵宮", "九条裟羅", "アーロイ", "雷電将軍", "珊瑚宮心海", "トーマ",
+        "ゴロー", "荒瀧一斗", "雲菫", "申鶴", "八重神子", "神里綾人", "夜蘭", "久岐忍", "鹿野院平蔵", "コレイ", "ティナリ",
+        "ドリー", "キャンディス", "セノ", "ニィロウ", "ナヒーダ", "レイラ", "ファルザン", "放浪者", "ヨォーヨ", "アルハイゼン",
+        "ディシア", "ミカ", "カーヴェ", "白朮", "綺良々", "リネット", "リネ", "フレミネ", "ヌヴィレット", "リオセスリ"
+      ];
+      var items = [
+        "雷を鎮める尊者",
+        "雷のような怒り",
+        "愛される少女",
+        "翠緑の影",
+        "悠久の磐岩",
+        "逆飛びの流星",
+        "烈火を渡る賢者",
+        "燃え盛る炎の魔女",
+        "旧貴族のしつけ",
+        "血染めの騎士道",
+        "氷風を彷徨う勇士",
+        "沈淪の心",
+        "千岩牢固",
+        "蒼白の炎",
+        "追憶のしめ縄",
+        "絶縁の旗印",
+        "華館夢醒形骸記",
+        "海染硨磲",
+        "辰砂往生録",
+        "来歆の余響",
+        "深林の記憶",
+        "金メッキの夢",
+        "砂上の楼閣の史話",
+        "楽園の絶花",
+        "水仙の夢",
+        "花海甘露の光",
+        "ファントムハンター",
+        "黄金の劇団"
+      ];
+      var parts = ["花", "羽", "時計", "杯", "冠"];
+      var main_op = [
+        "攻撃力 (数値)",
+        "攻撃力 (%)",
+        "防御力 (%)",
+        "HP (数値)",
+        "HP (%)",
+        "元素熟知 (数値)",
+        "元素チャージ効率 (%)",
+        "物理ダメージバフ (%)",
+        "炎ダメージバフ (%)",
+        "水ダメージバフ (%)",
+        "雷ダメージバフ (%)",
+        "氷ダメージバフ (%)",
+        "風ダメージバフ (%)",
+        "土ダメージバフ (%)",
+        "草ダメージバフ (%)",
+        "会心率 (%)",
+        "会心ダメージ (%)",
+        "与える治癒効果 (%)"
+      ];
+      var sub_op = [
+        "攻撃力 (数値)",
+        "攻撃力 (%)",
+        "防御力 (数値)",
+        "防御力 (%)",
+        "HP (数値)",
+        "HP (%)",
+        "元素熟知 (数値)",
+        "元素チャージ効率 (%)",
+        "会心率 (%)",
+        "会心ダメージ (%)"
+      ];
+      var Values = {
+        1: [14, 16, 18, 19],
+        2: ['4.1%', '4.7%', '5.3%', '5.8%'],
+        3: [16, 19, 21, 23],
+        4: ['5.1%', '5.8%', '6.6%', '7.3%'],
+        5: [209, 239, 269, 299],
+        6: ['4.1%', '4.7%', '5.3%', '5.8%'],
+        7: [16, 19, 21, 23],
+        8: ['4.5%', '5.2%', '5.8%', '6.5%'],
+        9: ['2.7%', '3.1%', '3.5%', '3.9%'],
+        10: ['5.4%', '6.2%', '7.0%', '7.8%']
+      };
+      // コンボボックスの変更イベントリスナーを設定
+      setEvent("div1");
+      setEvent("div2");
+      setEvent("div3");
+      setEvent("div4");
+      
+      function setEvent(key1){
+        var div = document.getElementById(key1);
+        var sub_op = div.getElementsByTagName("select")[0];
+        sub_op.addEventListener('change', function() {
+          addButtons(div, Values[sub_op.value]);
+        });
+      }
+
+      function calc(a, b) {
+        var i = a.value.trim() === '' ? 0 : a.value;
+        a.value = (parseFloat(i) + parseFloat(b)).toFixed(1);
+      }
+
+      // 強化値を表示する関数
+      function addButtons(div, values) {
+        var buttonElements = div.getElementsByTagName('button');
+        // すべてのボタン要素を削除
+        var index = 0;
+        while (index < buttonElements.length) {
+          div.removeChild(buttonElements[index]);
+        }
+        // 作成
+        var sub_op_val = div.getElementsByTagName("input")[0];
+        values.forEach(function(value) {
+          var b = document.createElement('button');
+          b.className = 'styled-button-min';
+          b.textContent = "+" + value;
+          b.addEventListener('click',function() {
+            calc(sub_op_val, value)
+          });
+          div.appendChild(b);
+        });
+      }
+      
+      setCombo(characters, document.getElementById("characters"));
+      setCombo(items, document.getElementById("items"));
+      setCombo(parts, document.getElementById("parts"));
+      setCombo(main_op, document.getElementById("main_op"));
+      setCombo2(sub_op, document.getElementById("sub_op1"));
+      setCombo2(sub_op, document.getElementById("sub_op2"));
+      setCombo2(sub_op, document.getElementById("sub_op3"));
+      setCombo2(sub_op, document.getElementById("sub_op4"));
+    </script>
+
+</body>
+</html>
