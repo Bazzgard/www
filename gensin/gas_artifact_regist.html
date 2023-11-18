@@ -102,25 +102,25 @@
         <select id="sub_op1">
           <option value="">サブオプション</option>
         </select>
-        <input id="sub_op1_val" type="number" step="0.1" min="0">
+        <input id="sub_op1_val" class="textBox" type="number" step="0.1" min="0">
       </div>
       <div id="div2" class="w-gensin-sub-option">
         <select id="sub_op2">
           <option value="">サブオプション</option>
         </select>
-        <input id="sub_op2_val" type="number" step="0.1" min="0">
+        <input id="sub_op2_val" class="textBox" type="number" step="0.1" min="0">
       </div>
       <div id="div3" class="w-gensin-sub-option">
         <select id="sub_op3">
           <option value="">サブオプション</option>
         </select>
-        <input id="sub_op3_val" type="number" step="0.1" min="0">
+        <input id="sub_op3_val" class="textBox" type="number" step="0.1" min="0">
       </div>
       <div id="div4" class="w-gensin-sub-option">
         <select id="sub_op4">
           <option value="">サブオプション</option>
         </select>
-        <input id="sub_op4_val" type="number" step="0.1" min="0">
+        <input id="sub_op4_val" class="textBox" type="number" step="0.1" min="0">
       </div>
       <div class="w-gensin-sub-option">
         <select id="characters">
@@ -129,11 +129,18 @@
       </div>
     </div>
     <button class="styled-button" onclick="executeScript()">スクリプトを実行</button>
+    <button class="styled-button" onclick="clear1()">数値クリア</button>
 
     <script>
       function set(list, id, val) {
         if (!id) return;
         list[id + 3] = val;
+      }
+      function clear1() {
+        var textBoxes = Array.from(document.getElementsByClassName("textBox"));
+        textBoxes.forEach(function(textBox) {
+          textBox.value = "";
+        });
       }
       function executeScript() {
         // Google Apps Scriptの実行URL
