@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>崩壊スターレイル 聖遺物登録</title>
+    <style>
+        .w-gensin-contents {
+            background-color: #e6e1cf;
+            padding: 20px 10px;
+            width: 65%;
+        }
+        .w-gensin-sub-option {
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .w-gensin-sub-option>select {
+            background-color: rgba(255,255,255,.6);
+            color: #404040;
+            padding: 5px;
+            border: none;
+            height: 36px;
+            vertical-align: middle;
+            margin-right: 5px;
+            font-weight: 700;
+            width: 25%;
+        }
+        .w-gensin-sub-option>input[type=number] {
+            width: 20%;
+            padding: 5px;
+            background-color: rgba(255,255,255,.6);
+            vertical-align: middle;
+            font-weight: 700;
+            height: 23px;
+            border: 1px solid #e2e2e2;
+            border-radius: 2px;
+            display: inline-block;
+            text-align: right;
+        }
+
+        .enhancement-value {
+          width: 60px;
+          text-align: center;
+          background-color: #f0f0f0;
+          margin-right: 10px;
+          padding: 5px;
+          border-radius: 5px;
+        }
+
+        .styled-button-min {
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          padding: 5px 10px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin-left: 2px;
+          cursor: pointer;
+          border-radius: 4px;
+        }
+
+        .styled-button {
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin-top: 20px;
+          cursor: pointer;
+          border-radius: 4px;
+        }
+
+        .styled-button:hover {
+          background-color: #45a049;
+        }
+      </style>
+</head>
+<body>
+    <div class="w-gensin-contents">
+      <div class="w-gensin-sub-option">
+        <select id="items">
+          <option value="">聖遺物選択</option>
+        </select>
+      </div>
+      <div class="w-gensin-sub-option">
+        <select id="parts">
+          <option value="">部位</option>
+        </select>
+      </div>
+      <div class="w-gensin-sub-option">
+        <select id="main_op">
+          <option value="">メインオプション</option>
+        </select>
+      </div>
+      <div id="div1" class="w-gensin-sub-option">
+        <select id="sub_op1">
+          <option value="">サブオプション</option>
+        </select>
+        <input id="sub_op1_val" class="textBox" type="number" step="0.1" min="0">
+      </div>
+      <div id="div2" class="w-gensin-sub-option">
+        <select id="sub_op2">
+          <option value="">サブオプション</option>
+        </select>
+        <input id="sub_op2_val" class="textBox" type="number" step="0.1" min="0">
+      </div>
+      <div id="div3" class="w-gensin-sub-option">
+        <select id="sub_op3">
+          <option value="">サブオプション</option>
+        </select>
+        <input id="sub_op3_val" class="textBox" type="number" step="0.1" min="0">
+      </div>
+      <div id="div4" class="w-gensin-sub-option">
+        <select id="sub_op4">
+          <option value="">サブオプション</option>
+        </select>
+        <input id="sub_op4_val" class="textBox" type="number" step="0.1" min="0">
+      </div>
+      <div class="w-gensin-sub-option">
+        <select id="characters">
+          <option value="">使用キャラ</option>
+        </select>
+      </div>
+    </div>
+    <button class="styled-button" onclick="executeScript()">スクリプトを実行</button>
+    <button class="styled-button" onclick="clear1()">数値クリア</button>
+
+    <script>
+      function set(list, id, val) {
+        if (!id) return;
+        list[id + 3] = val;
+      }
+      function clear1() {
+        var textBoxes = Array.from(document.getElementsByClassName("textBox"));
+        textBoxes.forEach(function(textBox) {
+          textBox.value = "";
+        });
+      }
+      function executeScript() {
+        // Google Apps Scriptの実行URL
+        var scriptUrl = 'https://script.google.com/macros/s/AKfycbyapErigB7B8wFagY-eyrqUOhopBLAhmzmC0Lgd0mHYkr6cVewub0dkzsEXNVaRdL5J/exec';
+        var row = "?row=";
+        
+        var character = document.getElementById("characters").value;
+        var item = document.getElementById("items").value;
+        var part = document.getElementById("parts").value;
+        var main = document.getElementById("main_op").value;
+
+        var r = [character,item,part,main,"","","","","","","","","",""];
+
+        set(r,parseInt(document.getElementById("sub_op1").value),document.getElementById("sub_op1_val").value);
+        set(r,parseInt(document.getElementById("sub_op2").value),document.getElementById("sub_op2_val").value);
+        set(r,parseInt(document.getElementById("sub_op3").value),document.getElementById("sub_op3_val").value);
+        set(r,parseInt(document.getElementById("sub_op4").value),document.getElementById("sub_op4_val").value);
+
+        console.log(r);
+        window.open(scriptUrl + "?row=" + encodeURIComponent(r));
+      }
+
+      function setCombo(items,comboBox) {
+        //要素をコンボボックスに追加
+        for (var i = 0; i < items.length; i++) {
+          comboBox.appendChild(new Option(items[i], items[i]));
+        }
+      }
+      function setCombo2(items,comboBox) {
+        //要素をコンボボックスに追加
+        for (var i = 0; i < items.length; i++) {
+          comboBox.appendChild(new Option(items[i], i+1));
+        }
+      }
+      // コンボボックスに表示する値の配列
+      var characters = [
+        "Dr.レイシオ", 
+        "ルアン・メェイ", 
+        "アルジェンティ", 
+        "フォフォ", 
+        "丹恒・飲月", 
+        "鏡流", 
+        "白露", 
+        "彦卿", 
+        "符玄", 
+        "刃", 
+        "景元", 
+        "羅刹", 
+        "トパーズ&カブ", 
+        "クラーラ", 
+        "ジェパード", 
+        "ゼーレ", 
+        "ブローニャ", 
+        "銀狼", 
+        "カフカ", 
+        "ヴェルト", 
+        "姫子", 
+        "開拓者", 
+        "寒鴉", 
+        "雪衣", 
+        "桂乃芬", 
+        "御空", 
+        "素裳", 
+        "停雲", 
+        "青雀", 
+        "ルカ", 
+        "リンクス", 
+        "フック", 
+        "サンポ", 
+        "ペラ", 
+        "ナターシャ", 
+        "セーバル", 
+        "ヘルタ", 
+        "アスター", 
+        "アーラン", 
+        "丹恒", 
+        "三月なのか", 
+      ];
+      var items = [
+        "流雲無痕の過客", 
+        "草の穂ガンマン", 
+        "純庭教会の聖騎士", 
+        "雪の密林の狩人", 
+        "成り上がりチャンピオン", 
+        "吹雪と対峙する兵士", 
+        "溶岩で鍛造する火匠", 
+        "星の如く輝く天才", 
+        "雷鳴轟くバンド", 
+        "昼夜の狭間を翔ける鷹", 
+        "流星の跡を追う怪盗", 
+        "荒地で盗みを働く廃土客", 
+        "宝命長存の蒔者", 
+        "仮想空間を漫遊するメッセンジャー", 
+        "深い牢獄の囚人", 
+        "灰燼を燃やし尽くす大公", 
+        "宇宙封印ステーション", 
+        "老いぬ者の仙舟", 
+        "汎銀河商事会社", 
+        "建創者のベロブルグ", 
+        "天体階差機関", 
+        "自転が止まったサルソット", 
+        "盗賊公国タリア", 
+        "生命のウェンワーク", 
+        "折れた竜骨", 
+        "星々の競技場", 
+        "夢の地ピノコニー", 
+        "蒼穹戦線グラモス", 
+      ];
+      var parts = [
+        "頭", 
+        "腕", 
+        "胴", 
+        "脚", 
+        "オーブ", 
+        "連結縄",   
+      ];
+      var main_op = [
+        "HP固定値", 
+        "攻撃力固定値", 
+        "速度", 
+        "HP％", 
+        "攻撃力％", 
+        "効果命中", 
+        "防御力％", 
+        "会心率", 
+        "会心ダメージ", 
+        "撃破特効", 
+        "治癒量", 
+        "炎ダメ", 
+        "氷ダメ", 
+        "雷ダメ", 
+        "風ダメ", 
+        "虚数ダメ", 
+        "量子ダメ", 
+        "物理ダメ", 
+        "EP回復効率", 
+      ];
+      var sub_op = [
+        "HP実数", 
+        "攻撃力実数", 
+        "防御力実数", 
+        "HP％", 
+        "攻撃力％", 
+        "防御力％", 
+        "会心率", 
+        "会心ダメージ", 
+        "速度", 
+        "撃破特効", 
+        "効果命中", 
+        "効果抵抗", 
+      ];
+      var Values = {
+        1:[33,38,42],
+        2:[16,19,21],
+        3:[16,19,21],
+        4:[3.4,3.8,4.3],
+        5:[3.4,3.8,4.3],
+        6:[4.3,4.8,5.4],
+        7:[2.5,2.9,3.2],
+        8:[5.1,5.8,6.4],
+        9:[2,2.3,2.6],
+        10:[5.1,5.8,6.4],
+        11:[3.4,3.8,4.3],
+        12:[3.4,3.8,4.3],
+      };
+      // コンボボックスの変更イベントリスナーを設定
+      setEvent("div1");
+      setEvent("div2");
+      setEvent("div3");
+      setEvent("div4");
+      
+      function setEvent(key1){
+        var div = document.getElementById(key1);
+        var sub_op = div.getElementsByTagName("select")[0];
+        sub_op.addEventListener('change', function() {
+          addButtons(div, Values[sub_op.value]);
+        });
+      }
+
+      function calc(a, b) {
+        var i = a.value.trim() === '' ? 0 : a.value;
+        a.value = (parseFloat(i) + parseFloat(b)).toFixed(1);
+      }
+
+      // 強化値を表示する関数
+      function addButtons(div, values) {
+        var buttonElements = div.getElementsByTagName('button');
+        // すべてのボタン要素を削除
+        var index = 0;
+        while (index < buttonElements.length) {
+          div.removeChild(buttonElements[index]);
+        }
+        // 作成
+        var sub_op_val = div.getElementsByTagName("input")[0];
+        values.forEach(function(value) {
+          var b = document.createElement('button');
+          b.className = 'styled-button-min';
+          b.textContent = "+" + value;
+          b.addEventListener('click',function() {
+            calc(sub_op_val, value)
+          });
+          div.appendChild(b);
+        });
+      }
+      
+      setCombo(characters, document.getElementById("characters"));
+      setCombo(items, document.getElementById("items"));
+      setCombo(parts, document.getElementById("parts"));
+      setCombo(main_op, document.getElementById("main_op"));
+      setCombo2(sub_op, document.getElementById("sub_op1"));
+      setCombo2(sub_op, document.getElementById("sub_op2"));
+      setCombo2(sub_op, document.getElementById("sub_op3"));
+      setCombo2(sub_op, document.getElementById("sub_op4"));
+    </script>
+
+</body>
+</html>
