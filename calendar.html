@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .calendar {
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        .calendar th, .calendar td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            width: 35px;
+        }
+        .calendar th {
+            background-color: #f2f2f2;
+        }
+        .calendar td {
+            cursor: pointer;
+        }
+        .calendar td:hover {
+            background-color: #f2f2f2;
+        }
+        .holiday {
+            background-color: #ffc;
+        }
+        .today {
+            background-color: #ff0000; /* 当日の色を指定 */
+            color: #fff; /* 当日の文字色を白に設定 */
+            font-weight: bold; /* 当日の文字を太字に設定 */
+        }
+        .saturday {
+            background-color: #bdcfe7; /* 土曜日の背景色を指定 */
+        }
+        .sunday {
+            background-color: #f5c6cb; /* 日曜日の背景色を指定 */
+        }
+    </style>
+</head>
+<body>
+    <table class="calendar" id="calendar">
+        <thead>
+            <tr>
+                <th colspan="1">
+                    <span class="nextMonth" onclick="nextMonth(-1)"><<</span>
+                </th>
+                <th colspan="5">
+                    <span id="currentMonth">April 2024</span>
+                </th>
+                <th colspan="1">
+                    <span class="nextMonth" onclick="nextMonth(1)">>></span>
+                </th>
+            </tr>
+            <tr>
+                <th>Sun</th>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        let currentYear = 2024;
+        let currentMonth = 4;
+
+        // カレンダーを表示する関数
+        function displayCalendar(year, month) {
+            const firstDay = new Date(year, month - 1, 1);
+            const lastDay = new Date(year, month, 0);
+            const daysInMonth = lastDay.getDate();
+            const today = new Date().getDate();
+
+            const tableBody = document.querySelector("#calendar tbody");
+            tableBody.innerHTML = "";
+
+            let date = 1;
+            for (let i = 0; i < 6; i++) {
+                if (date > daysInMonth) break;
+
+                const row = tableBody.insertRow();
+                for (let j = 0; j < 7; j++) {
+                    const cell = row.insertCell();
+                    if (i === 0 && j < firstDay.getDay()) {
+                        cell.innerHTML = "";
+                    } else if (date > daysInMonth) {
+                        //break;
+                    } else {
+                        cell.innerHTML = date;
+                        if (date === today && month === new Date().getMonth() + 1 && year === new Date().getFullYear()) {
+                            cell.classList.add('today');
+                        }
+                        if (j === 0) {
+                            cell.classList.add('sunday');
+                        } else if (j === 6) {
+                            cell.classList.add('saturday');
+                        }
+                        date++;
+                    }
+                }
+            }
+
+            document.getElementById("currentMonth").innerText = `${getMonthName(month)} ${year}`;
+        }
+
+        // 月の名前を取得する関数
+        function getMonthName(month) {
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            return months[month - 1];
+        }
+
+        // 次の月のカレンダーを表示する関数
+        function nextMonth(i) {
+            currentMonth += i;
+            if (currentMonth > 12) {
+                currentYear++;
+                currentMonth = 1;
+            } else if (currentMonth < 1) {
+                currentYear--;
+                currentMonth = 12;
+            }
+            displayCalendar(currentYear, currentMonth);
+        }
+
+        // 初期表示
+        displayCalendar(currentYear, currentMonth);
+    </script>
+</body>
+</html>
