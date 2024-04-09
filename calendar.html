@@ -75,8 +75,15 @@
         let currentYear = 2024;
         let currentMonth = 4;
 
+        // Google Apps Scriptから祝日情報を取得する関数
+        async function getHolidays(year, month) {
+            const response = await fetch(`https://script.google.com/macros/s/AKfycbxBFywt3tAqIo-dd-I8Sw_gLqPje3ywusmHRyS75eBW5vGkzaGS8dsVAZGH_LHB5OP-Fw/exec?date=${year}-${month}`);
+            const holidays = await response.json();
+            return holidays;
+        }
+
         // カレンダーを表示する関数
-        function displayCalendar(year, month) {
+        async function displayCalendar(year, month) {
             const firstDay = new Date(year, month - 1, 1);
             const lastDay = new Date(year, month, 0);
             const daysInMonth = lastDay.getDate();
@@ -112,6 +119,21 @@
             }
 
             document.getElementById("currentMonth").innerText = `${getMonthName(month)} ${year}`;
+
+            // 祝日情報を取得し、カレンダーに色を付ける
+            const holidays = await getHolidays(year, month);
+            console.log(holidays);
+            const cells = document.querySelectorAll(".calendar tbody td");
+            cells.forEach(cell => {
+                const currentDate = `${year}-${format(month)}-${format(cell.innerHTML)}`;
+                if (holidays.some(holiday => holiday.startDate === currentDate)) {
+                    cell.classList.add('holiday');
+                }
+            });
+        }
+
+        function format(i){
+            return i < 10 ? '0' + i : i;
         }
 
         // 月の名前を取得する関数
