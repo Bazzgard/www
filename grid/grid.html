@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorful Grid</title>
+    <style>
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-size), 50px);
+            grid-template-rows: repeat(var(--grid-size), 50px);
+            gap: 2px;
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: lightgray;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .path {
+            background-color: yellow; /* 最短経路の背景色 */
+        }
+
+        #area {
+            margin: 5px;
+            padding: 5px;
+            /*border: 1px solid #999;*/
+        }
+        
+        p {
+            margin: 10px 0;
+            padding: 5px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="area">
+        <label for="gridSize">Grid Size:</label>
+        <input type="number" id="gridSize" value="5">
+        <button onclick="updateGrid()">Update Grid</button>
+        
+        <div class="grid" id="grid"></div>
+
+        <button onclick="findShortestPath()">Find Shortest Path</button>
+        <button onclick="resetGrid()">resetGrid</button>
+    </div>
+    <div id="area">
+        <p>
+            <b>■ HELP</b><br>
+            スタートからゴールまでのルートを探しハイライトします。<br>
+            グリッドをクリックで以下を切り替える。<br>
+            SとGは単一にしてください。<br>
+        </p>
+        <ul>
+            <li><strong>S:</strong> スタート</li>
+            <li><strong>G:</strong> ゴール</li>
+            <li><strong>-:</strong> 障害物</li>
+        </ul>
+    </div>
+
+    <script>
+        let sPosition = null;
+        let gPosition = null;
+        const states = ["", "S", "G", "-"];
+
+        // セルの状態を変更するメソッド
+        function changeCellState(cellId) {
+            const cell = document.getElementById(cellId);
+            let current = cell.textContent.trim();
+            let next = "";
+
+            // 現在の状態に基づいて次の状態を設定
+            if (current === "S" || current === "G" || current === "-") {
+                if (current === "S") sPosition = null;
+                if (current === "G") gPosition = null;
+                next = ""; // 現在の状態が "S", "G", "-" の場合、空白に設定
+            } else {
+                i = 1;
+                if (sPosition !== null) i = 2;
+                if (sPosition !== null && gPosition !== null) i = 3;
+                
+                next = states[i];
+                if (next === "S") sPosition = cellId;
+                if (next === "G") gPosition = cellId;
+            }
+            
+            // セルの状態を切り替え
+            cell.textContent = next;
+        }
+
+        // 初期化時に実行するメソッド
+        function initializeGrid() {
+            var grid = document.getElementById("grid");
+            var gridSize = parseInt(grid.style.getPropertyValue("--grid-size"));
+            for (var i = 0; i < gridSize * gridSize; i++) {
+                var cell = document.createElement("div");
+                cell.className = "cell";
+                cell.id = "cell" + (i + 1);
+                cell.addEventListener("click", function () {
+                    changeCellState(this.id);
+                });
+                grid.appendChild(cell);
+            }
+        }
+
+        // グリッドをクリアしてリセットするメソッド
+        function resetGrid() {
+            sPosition = null;
+            gPosition = null;
+            var cells = document.querySelectorAll(".cell");
+            cells.forEach(function (cell) {
+                cell.textContent = "";
+                cell.className = "cell"; // 最短経路のスタイルをリセット
+            });
+        }
+
+        function resetColor() {
+            var cells = document.querySelectorAll(".cell");
+            cells.forEach(function (cell) {
+                cell.className = "cell"; // 最短経路のスタイルをリセット
+            });
+        }
+
+        // グリッドを更新するメソッド
+        function updateGrid() {
+            var newSize = document.getElementById("gridSize").value;
+            var grid = document.getElementById("grid");
+            grid.style.setProperty("--grid-size", newSize);
+            grid.innerHTML = ""; // グリッドをクリア
+            initializeGrid();
+            resetGrid();
+        }
+
+        // 最短経路を探索してハイライトするメソッド
+        function findShortestPath() {
+            resetColor();
+            var grid = document.getElementById("grid");
+            var gridSize = parseInt(grid.style.getPropertyValue("--grid-size"));
+
+            // スタートとゴールの位置を探す
+            var start, goal;
+            for (var i = 0; i < gridSize * gridSize; i++) {
+                var cell = document.getElementById("cell" + (i + 1));
+                if (cell.textContent === "S") {
+                    start = i;
+                }
+                if (cell.textContent === "G") {
+                    goal = i;
+                }
+                if (start !== undefined && goal !== undefined) {
+                    break;
+                }
+            }
+
+            // 最短経路を幅優先探索で見つける
+            if (start !== undefined && goal !== undefined) {
+                var path = findPath(start, goal, gridSize);
+                // 経路の背景色を変更
+                highlightPath(path);
+            }
+        }
+
+        function findPath(start, goal, gridSize) {
+            // キューに開始地点と経路を格納
+            var queue = [[start, []]];
+
+            // 訪問済みセルの追跡
+            var visited = new Set();
+            visited.add(start);
+
+            // 上下左右の移動方向
+            var directions = [
+                -gridSize, // 上
+                gridSize,  // 下
+                -1,        // 左
+                1          // 右
+            ];
+
+            // 幅優先探索を実行
+            while (queue.length > 0) {
+                var [current, path] = queue.shift();
+                // console.log(current, path);
+
+                // ゴール地点に到達した場合
+                if (current === goal) {
+                    // ゴール地点に到達した場合、経路を返します
+                    return path;
+                }
+
+                // 隣接するセルを探索
+                for (var i = 0; i < directions.length; i++) {
+                    var next = current + directions[i];
+
+                    // グリッド内の有効な位置であることを確認
+                    if (next >= 0 && next < gridSize * gridSize) {
+                        // 現在の位置と隣接する位置の列を計算
+                        var currentCol = current % gridSize;
+                        var nextCol = next % gridSize;
+
+                        // 列の境界をチェックして、行の境界を確認
+                        var validHorizontalMove = Math.abs(currentCol - nextCol) <= 1;
+                        var currentRow = Math.floor(current / gridSize);
+                        var nextRow = Math.floor(next / gridSize);
+                        var validVerticalMove = Math.abs(currentRow - nextRow) <= 1;
+
+                        // 移動が有効な場合
+                        if (validHorizontalMove && validVerticalMove) {
+                            // 隣接するセルの情報を取得
+                            var nextCell = document.getElementById("cell" + (next + 1));
+
+                            // 訪問済みでなく、障害物でない場合
+                            if (!visited.has(next) && nextCell.textContent !== "-") {
+                                visited.add(next);
+                                queue.push([next, [...path, next]]);
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            // 経路が見つからなかった場合、空の経路を返します
+            return [];
+        }
+
+
+        // 経路をハイライトするメソッド
+        function highlightPath(path) {
+            path.forEach(function (index) {
+                var cell = document.getElementById("cell" + (index + 1));
+                cell.classList.add("path");
+            });
+        }
+
+        // ページロード時に実行
+        updateGrid();
+    </script>
+
+</body>
+
+</html>
