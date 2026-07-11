@@ -1,0 +1,98 @@
+<html>
+<head>
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    height: 100%;
+}
+
+#editor,
+#preview {
+    width: 50%;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+#editor {
+    resize: none;
+    border: none;
+    border-right: solid 1px #ccc;
+    font-size: 16px;
+    font-family: Consolas, monospace;
+}
+
+#preview {
+    background: #fafafa;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <textarea id="editor"></textarea>
+    <div id="preview"></div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script>
+const editor = document.getElementById("editor");
+const preview = document.getElementById("preview");
+
+editor.addEventListener("input", () => {
+    preview.innerHTML = marked.parse(editor.value);
+});
+
+// 初期表示
+editor.value = `# Markdown
+
+- Hello
+- World
+
+**Bold**
+`;
+
+// -------------------------
+// Markdownファイルのドラッグ&ドロップ
+// -------------------------
+
+["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+    document.addEventListener(eventName, e => {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+});
+
+document.addEventListener("drop", e => {
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+
+    // .md または .markdown のみ受け付ける
+    const name = file.name.toLowerCase();
+    if (!(name.endsWith(".md") || name.endsWith(".markdown"))) {
+        alert("Markdownファイル(.md)をドロップしてください。");
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        editor.value = reader.result;
+        preview.innerHTML = marked.parse(editor.value);
+    };
+
+    reader.readAsText(file, "UTF-8");
+});
+
+preview.innerHTML = marked.parse(editor.value);
+</script>
+
+</body>
+</html>
